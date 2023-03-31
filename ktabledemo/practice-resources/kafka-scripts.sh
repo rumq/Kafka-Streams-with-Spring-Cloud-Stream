@@ -10,3 +10,9 @@ kafka-console-producer --topic stock-tick-topic --broker-list localhost:9092 --p
 
 confluent local services stop
 confluent local destroy
+
+kafka-topics --create \
+    --topic stock-tick-topic \
+    --bootstrap-server localhost:9092 \
+    --replication-factor 1 \
+    --partitions 1
