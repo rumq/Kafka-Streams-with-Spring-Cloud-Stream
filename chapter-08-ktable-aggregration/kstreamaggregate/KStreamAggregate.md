@@ -2,6 +2,8 @@
 
 # KSreamAggregate 
 
+IN_PROGRESS
+
 ## Summary
 
 The application listens to the topic `employees-topic` and prints the average salary for each department.

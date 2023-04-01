@@ -26,6 +26,7 @@ public class LoyaltyService {
 
         KStream<String, Notification> notificationKStream = input
                 .filter((k, v) -> v.getCustomerType().equalsIgnoreCase("PRIME"))
+                // new key is the customer card no
                 .map((k, v) -> new KeyValue<>(v.getCustomerCardNo(), recordBuilder.getNotification(v)))
                 .groupByKey()
                 .reduce((aggValue, newValue) -> {

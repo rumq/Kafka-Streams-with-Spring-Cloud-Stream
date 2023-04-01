@@ -28,12 +28,11 @@ public class AvroPosGeneratorApplication implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 
-		// for (int i = 0; i < INVOICE_COUNT; i++) {
-		while (true) {
+		for (int i = 0; i < INVOICE_COUNT; i++) {
+		// while (true) {
 			producerService.sendMessage(invoiceGenerator.getNextInvoice());
 			Thread.sleep(1000);
 		}
-		// }
 	}
 
 }
