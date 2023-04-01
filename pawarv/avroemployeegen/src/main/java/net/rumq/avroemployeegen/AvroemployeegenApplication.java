@@ -1,7 +1,7 @@
 package net.rumq.avroemployeegen;
 
 import net.rumq.avroemployeegen.services.KafkaProducerService;
-import net.rumq.demo.kafka.model.Employee;
+import guru.learningjournal.examples.kafka.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -21,10 +21,14 @@ public class AvroemployeegenApplication implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        String run = "a-";
-        producerService.sendMessage(createEmployee(run + "1111", "Anand", "Audio", 1111));
-        producerService.sendMessage(createEmployee(run + "2222", "Bacchan", "Brand", 2222));
-        producerService.sendMessage(createEmployee(run + "3333", "Chand", "Channel", 3333));
+
+        producerService.sendMessage(createEmployee("a", "a", "E", 1));
+        producerService.sendMessage(createEmployee("b", "b", "E", 2));
+        producerService.sendMessage(createEmployee("c", "c", "A", 3));
+        producerService.sendMessage(createEmployee("d", "d", "A", 4));
+
+        producerService.sendMessage(createEmployee("b", "b", "A", 2));
+        producerService.sendMessage(createEmployee("d", "d", "E", 4));
 
 
     }

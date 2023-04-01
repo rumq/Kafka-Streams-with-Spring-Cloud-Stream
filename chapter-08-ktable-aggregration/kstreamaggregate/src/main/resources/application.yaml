@@ -3,7 +3,7 @@ spring:
     stream:
       bindings:
         employee-input-channel:
-          destination: employees-topic
+          destination: employees-topic-5
       kafka:
         streams:
           binder:

@@ -1,7 +1,7 @@
 package net.rumq.avroemployeegen.services;
 
 import lombok.extern.log4j.Log4j2;
-import net.rumq.demo.kafka.model.Employee;
+import guru.learningjournal.examples.kafka.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
