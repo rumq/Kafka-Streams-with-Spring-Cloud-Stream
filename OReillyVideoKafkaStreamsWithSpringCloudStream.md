@@ -1070,6 +1070,8 @@ flowchart TD
     K1 --> P[Print]
   end
 ```
+As we are using `groupBy` without the `Key`, internal repartitioning will happen.
+
 
 ```java
     public void process(KStream<String, String> input) {
