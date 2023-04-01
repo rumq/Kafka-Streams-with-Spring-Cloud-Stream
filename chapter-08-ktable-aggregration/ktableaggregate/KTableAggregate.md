@@ -1,6 +1,6 @@
 > [README](../README.md)
 
-# KSreamAggregate 
+# KTabelAggregate
 
 IN_PROGRESS
 

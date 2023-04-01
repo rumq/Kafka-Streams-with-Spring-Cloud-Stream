@@ -113,10 +113,20 @@ Chapter 5 - Producing Data To Kafka
 
 Chapter 8 - KTable and Aggregation
 
+Aggregating a KStream
+
 ### ktableaggregate
 
-### ktabledemo
 Chapter 8 - KTable and Aggregation
+
+Aggregating a KTable
+
+
+### ktabledemo
+DONE
+Chapter 8 - KTable and Aggregation
+
+Introduction to KTable
 
 ### lastlogin
 
@@ -137,6 +147,8 @@ Reducing a kafka stream
 ### state-store
 
 ### streamingaggregates
+DONE
+Chapter 8 - KTable and Aggregation
 
 ### streamingtest
 
