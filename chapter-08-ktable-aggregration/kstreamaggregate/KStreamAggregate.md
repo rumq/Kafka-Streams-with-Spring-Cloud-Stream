@@ -19,11 +19,11 @@ docker-compose up -d
 # Start the Kafka docker container
 docker exec -ti <containerid> sh
 
-# Start the aggregate application
+# Start the aggregate Spring boot application
 cd chapter-08-ktable-aggregration/kstreamaggregate
 mvn spring-boot:run
 
-# Start the employee producer
+# Start the employee producer Spring boot application
 cd pawarv/avroposgen
 mvn spring-boot:run
 ```

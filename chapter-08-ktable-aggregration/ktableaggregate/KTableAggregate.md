@@ -2,8 +2,6 @@
 
 # KTabelAggregate
 
-IN_PROGRESS
-
 ## Summary
 
 The application listens to the topic `employees-topic` and prints the average salary for each department.
@@ -19,16 +17,17 @@ docker-compose up -d
 # Start the Kafka docker container
 docker exec -ti <containerid> sh
 
-# Start the aggregate application
+# Start the aggregate Spring boot application
 cd chapter-08-ktable-aggregration/ktableaggregate
 mvn spring-boot:run
 
-# Start the employee producer
+# Start the employee producer Spring boot application
 cd pawarv/avroposgen
 mvn spring-boot:run
 ```
 
 ## Notes
-See that the result shows 2 employees in both the departments which is incorrect.
-The average salary in both comes to 2.5 which is correct.
+See that the result shows 2 employees in both the departments.
+The average salary in both comes to 2.5.
+These are expected results.
 
