@@ -1,0 +1,16 @@
+guru/learningjournal/examples/kafka/jsonposgen/model/LineItem.java
+ guru.learningjournal.examples.kafka.jsonposgen.model.LineItem
+guru/learningjournal/examples/kafka/jsonposgen/services/datagenerator/InvoiceGenerator.java
+ guru.learningjournal.examples.kafka.jsonposgen.services.datagenerator.InvoiceGenerator
+guru/learningjournal/examples/kafka/jsonposgen/services/datagenerator/AddressGenerator.java
+ guru.learningjournal.examples.kafka.jsonposgen.services.datagenerator.AddressGenerator
+guru/learningjournal/examples/kafka/jsonposgen/services/KafkaProducerService.java
+ guru.learningjournal.examples.kafka.jsonposgen.services.KafkaProducerService
+guru/learningjournal/examples/kafka/jsonposgen/model/PosInvoice.java
+ guru.learningjournal.examples.kafka.jsonposgen.model.PosInvoice
+guru/learningjournal/examples/kafka/jsonposgen/model/DeliveryAddress.java
+ guru.learningjournal.examples.kafka.jsonposgen.model.DeliveryAddress
+guru/learningjournal/examples/kafka/jsonposgen/JsonPosGeneratorApplication.java
+ guru.learningjournal.examples.kafka.jsonposgen.JsonPosGeneratorApplication
+guru/learningjournal/examples/kafka/jsonposgen/services/datagenerator/ProductGenerator.java
+ guru.learningjournal.examples.kafka.jsonposgen.services.datagenerator.ProductGenerator

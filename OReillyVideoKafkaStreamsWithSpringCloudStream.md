@@ -2,7 +2,67 @@
 
 # O'Reilly Video - Kafka Streams with Spring Cloud Stream
 
-## Status : IN_PROGRESS
+- [O'Reilly Video - Kafka Streams with Spring Cloud Stream](#oreilly-video---kafka-streams-with-spring-cloud-stream)
+  - [Links](#links)
+  - [Chapters](#chapters)
+  - [Chapter 01 Before You Begin](#chapter-01-before-you-begin)
+    - [About the Course](#about-the-course)
+    - [Course Prerequisite](#course-prerequisite)
+    - [Setting up Your Environment](#setting-up-your-environment)
+    - [Creating Your Starter Project](#creating-your-starter-project)
+  - [Chapter 03 Environment Setup On MacMachine](#chapter-03-environment-setup-on-macmachine)
+    - [Installing Confluent Cluster Mac](#installing-confluent-cluster-mac)
+    - [Create your first Kafka Streams Project - Mac](#create-your-first-kafka-streams-project---mac)
+      - [**1 Input/Output Channels**](#1-inputoutput-channels)
+      - [**2 Binding interface**](#2-binding-interface)
+      - [**3 Listener Service**](#3-listener-service)
+  - [Chapter 04 Understanding The Technology Stack](#chapter-04-understanding-the-technology-stack)
+    - [Understanding the Kafka support in Spring](#understanding-the-kafka-support-in-spring)
+    - [Introduction to Spring Cloud Stream](#introduction-to-spring-cloud-stream)
+    - [Introduction to Kafka Streams](#introduction-to-kafka-streams)
+  - [Chapter 05 Producing Data To Kafka](#chapter-05-producing-data-to-kafka)
+    - [Simple RESTFul Kakfa Producer](#simple-restful-kakfa-producer)
+    - [Creating Retail POS Simulator](#creating-retail-pos-simulator)
+    - [Producing JSON Messages](#producing-json-messages)
+    - [Producing AVRO Messages](#producing-avro-messages)
+  - [Chapter 06 Processing Kafka Streams](#chapter-06-processing-kafka-streams)
+    - [Real-Time Stream Processing Requirement](#real-time-stream-processing-requirement)
+      - [**Shipment service**](#shipment-service)
+      - [**Loyalty service**](#loyalty-service)
+      - [**Trend service**](#trend-service)
+      - [**Combined diagram Requirement**](#combined-diagram-requirement)
+      - [**Combined diagram Impl**](#combined-diagram-impl)
+      - [**Tech requirement**](#tech-requirement)
+    - [Processing JSON Message Stream](#processing-json-message-stream)
+      - [**Step 1 input/output channels**](#step-1-inputoutput-channels)
+      - [**Step 2 Binding interface**](#step-2-binding-interface)
+      - [**Step 3 Create services**](#step-3-create-services)
+    - [Processing AVRO Message Stream](#processing-avro-message-stream)
+      - [**Step 1 Data Model**](#step-1-data-model)
+      - [**Step 2 Data Tranformation Services**](#step-2-data-tranformation-services)
+      - [**Step 3 Kafka Listeners**](#step-3-kafka-listeners)
+      - [**Step 4 Kafka Channels and Stream Binder**](#step-4-kafka-channels-and-stream-binder)
+    - [Over all flow](#over-all-flow)
+    - [Understanding Record Serialization and Deserialization](#understanding-record-serialization-and-deserialization)
+    - [KStream Methods](#kstream-methods)
+  - [Chapter 7 : Working with KStream](#chapter-7--working-with-kstream)
+    - [Kafka Streams Exactly Once implementation](#kafka-streams-exactly-once-implementation)
+    - [Implement Exactly Once](#implement-exactly-once)
+    - [Let's Practice - a comlex problem statement](#lets-practice---a-comlex-problem-statement)
+    - [Working with XML](#working-with-xml)
+    - [Handling Errors and Exceptions](#handling-errors-and-exceptions)
+    - [Mixed branching of a KStream](#mixed-branching-of-a-kstream)
+    - [Handling Poisson Pills](#handling-poisson-pills)
+  - [Chapter 8: KTable and Aggregation](#chapter-8-ktable-and-aggregation)
+    - [Introduction to KTable](#introduction-to-ktable)
+    - [Deep Dive into KTable](#deep-dive-into-ktable)
+    - [Computing Streaming Aggregates](#computing-streaming-aggregates)
+    - [Aggregate Concepts](#aggregate-concepts)
+    - [Reducing a Kafka Stream](#reducing-a-kafka-stream)
+    - [Aggregating a Kafka Stream](#aggregating-a-kafka-stream)
+    - [Aggregation Challenges](#aggregation-challenges)
+    - [KTable Aggregation](#ktable-aggregation)
+  - [Chapter 9 : Timestamp and Windowing Aggregates](#chapter-9--timestamp-and-windowing-aggregates)
 
 ## Links
 
@@ -1167,7 +1227,7 @@ flowchart TD
 
 As an example, if we have three partitions, and three keys STR1, STR2, STR3, it's possible that they are distributed across the three partitions. If we have three threads, then each thread will be assigned a partition. The data for STR1 will be processed by thread 1, STR2 by thread 2, and STR3 by thread 3. If we use `groupByKey`, then each thread is able to calculate the aggregate for each key.
 
-But, if we want to by a different key say customer id, then these may be distributed across the partitions, and therefore the threads will not be able to calculate the aggregate for each customer id. In this case, we can use `groupBy` to group the data by the customer id. Then the framework will create an internal topic with the same number of partitions as the input topic. The data will be repartitioned by the customer id. This will ensure that all the data for a particular customer id will be in the same partition. This will ensure that the threads will be able to calculate the aggregate for each customer id.
+But, if we want to aggregate by a different key say customer id, then these may be distributed across the partitions, and therefore the threads will not be able to calculate the aggregate for each customer id. In this case, we can use `groupBy` to group the data by the customer id. Then the framework will create an internal topic with the same number of partitions as the input topic. The data will be repartitioned by the customer id. This will ensure that all the data for a particular customer id will be in the same partition. This will ensure that the threads will be able to calculate the aggregate for each customer id.
 
 This will of course be an expensive operation, so we have to design the keys well in advance, so this repartitioning is not required.
 
@@ -1186,7 +1246,6 @@ Computing `TotalLoyaltyPoints` for a customer which will require adding up all t
 
 We will be looking at _rewards_ demo.
 
-### Reducing a Kafka Stream
 
 ### Aggregating a Kafka Stream
 
