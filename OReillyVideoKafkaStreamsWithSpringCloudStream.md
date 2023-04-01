@@ -1004,7 +1004,9 @@ Most of KStream operations are available for KTable.
 
 ### Deep Dive into KTable
 
-See [ktabledemo](https://https://github.com/rumq/Kafka-Streams-with-Spring-Cloud-Stream/tree/main/ktabledemo)
+See
+
+- [KTableDemoApplication](ktabledemo/KTableDemo.md)
 
 ```mermaid
 flowchart TD
@@ -1045,12 +1047,16 @@ A KTable can be converted into a KStream using `toStream()` method. This is done
 
 ### Computing Streaming Aggregates
 
-See the [aggregationdemo](https://github.com/rumq/Kafka-Streams-with-Spring-Cloud-Stream/tree/main/streamingaggregates)
+See
+
+- [aggregationdemo](https://github.com/rumq/Kafka-Streams-with-Spring-Cloud-Stream/tree/main/streamingaggregates)
+- [StreamingAggregates](streamingaggregates/StreamingAggregates.md)
+
+
 
 Problem Statement
 
 ```mermaid
-
 flowchart TD
   subgraph "Problem Statement"
     direction LR
