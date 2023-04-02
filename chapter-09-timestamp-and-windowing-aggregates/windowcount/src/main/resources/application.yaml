@@ -2,22 +2,23 @@ spring:
   cloud:
     stream:
       bindings:
-        click-input-channel:
-          destination: simple-invoice-topic
+        invoice-input-channel:
+          destination: simple-invoice-topic-1
       kafka:
         streams:
           binder:
             brokers:  localhost:9092
             configuration:
+              schema.registry.url: http://localhost:8081
               commit.interval.ms: 10000
               state.dir: state-store
               default:
                 key:
                   serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-                value:
-                  serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+                # value:
+                #   serde: io.confluent.kafka.streams.serdes.json.KafkaJsonSchemaSerde
           bindings:
-            click-input-channel:
+            invoice-input-channel:
               consumer:
-                timestampExtractorBeanName: userClickTimeExtractor
+                timestampExtractorBeanName: invoiceTimesExtractor
 

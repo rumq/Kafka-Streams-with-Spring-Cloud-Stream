@@ -50,6 +50,11 @@
 			<classifier>test-binder</classifier>
 			<type>test-jar</type>
 		</dependency>
+        <dependency>
+            <groupId>io.confluent</groupId>
+            <artifactId>kafka-streams-json-schema-serde</artifactId>
+            <version>6.0.0</version>
+        </dependency>		
 	</dependencies>
 
 	<dependencyManagement>
@@ -89,12 +94,16 @@
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
-		</repository>
+		</repository>		
 		<repository>
 			<id>spring-milestones</id>
 			<name>Spring Milestones</name>
 			<url>https://repo.spring.io/milestone</url>
 		</repository>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>		
 	</repositories>
 
 </project>
