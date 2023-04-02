@@ -63,6 +63,11 @@
     - [Aggregation Challenges](#aggregation-challenges)
     - [KTable Aggregation](#ktable-aggregation)
   - [Chapter 9 : Timestamp and Windowing Aggregates](#chapter-9--timestamp-and-windowing-aggregates)
+  - [Chapter 10 : Joins in Kafka Streams](#chapter-10--joins-in-kafka-streams)
+    - [A payment cycle flow chart](#a-payment-cycle-flow-chart)
+    - [A payment cycle sequence diagram](#a-payment-cycle-sequence-diagram)
+    - [Payment Request table](#payment-request-table)
+    - [Payment Confirmation table](#payment-confirmation-table)
 
 ## Links
 
@@ -1258,13 +1263,108 @@ See
 
 ### KTable Aggregation
 
--[KTableDemo](chapter-08-ktable-aggregration/ktabledemo/KTableDemo.md)
--[KTableAggregate](chapter-08-ktable-aggregration/ktableaggregate/KTableAggregate.md)
+-[KTableDemo](chapter-08-ktable-aggregration/ktabledemo/KTableDemo.md) -[KTableAggregate](chapter-08-ktable-aggregration/ktableaggregate/KTableAggregate.md)
 
 ## Chapter 9 : Timestamp and Windowing Aggregates
 
-See [TimestampExtractor](https://kafka.apache.org/31/javadoc/org/apache/kafka/streams/processor/TimestampExtractor.html) interface documentation for list of timestamp extractors.
+See
+
+- [TimestampExtractor](https://kafka.apache.org/31/javadoc/org/apache/kafka/streams/processor/TimestampExtractor.html) interface documentation for list of timestamp extractors.
+- [WindowCount](chapter-09-timestamp-and-windowing-aggregates/windowcount/WindowCount.md)
+- [SessionWindow](chapter-09-timestamp-and-windowing-aggregates/sessionwindow/SessionWindow.md)
+
+## Chapter 10 : Joins in Kafka Streams
+
+Conditions for a join :
+
+1. KStream/KTable to be joined should have a valid key
+2. All topics should have the same number of partitions
+3. Data in the topics should be partitioned by the same key (Co-partitioned)
+4. Co-partitioning is not required if the join is a KStream-GlobalKTable join
+5. Non-key based joins are allowed with KStream-GlobalKTable joins
+6. KStream must be on the left side of the join
+
+KStream-KStream joins are always windowed.
+
+### A payment cycle flow chart
+
+```mermaid
+flowchart
+  subgraph "Payment Cycle"
+    subgraph "Kafka"
+     KA[Kafka App] --> | Pay Req| T1[reqest-topic]
+     KA --> | Pay Conf| T2[confirm-topic]
+    end
+  U[User] --> |1 Pay Req| S[Site]
+    S --> |2 Pay Req| W[Wallet]
+    W --> |3 Pay Req| K[Kafka App]
+    W --> |4 Tran Id| S
+    W --> |5 OTP | U
+    U --> |6  OTP | S
+    S --> |7 OTP | W
+    W --> |8 Pay Conf| K
+  end
+```
+
+### A payment cycle sequence diagram
+
+Here is the sequence diagram for the above flow.
+
+```mermaid
+
+sequenceDiagram
+  title: Payment Cycle
+  participant U as User
+  participant S as Site
+  participant W as Wallet
+  participant KA as Kafka App
+  participant K as Kafka
+  U->>S: 1 Pay Req
+  S->>W: 2 Pay Req
+  W->>KA: 3 Pay Req
+  KA->>K: 3b request-topic
+  W->>S: 4 Tran Id
+  W->>U: 5 OTP
+  U->>S: 6 OTP
+  S->>W: 7 OTP
+  W->>KA: 8 Pay Conf
+  KA->>K: 8b confirm-topic
 
 ```
 
+Payment Request `100001`
+
+```json
+{
+  "TransactionID": "100001",
+  "CreatedTime": 1550149860000,
+  "SourceAccountID": "131100",
+  "TargetAccountID": "151837",
+  "Amount": 3000,
+  "OTP": 852960
+}
 ```
+
+Payment Confirmation `100001`
+
+```json
+{ "TransactionID": "100001", "CreatedTime": 1550150100000, "OTP": 852960 }
+```
+
+### Payment Request table
+
+| requestID | createdTime         | otp    |
+| --------- | ------------------- | ------ |
+| 10001     | 2020-01-01 10:11:00 | 123451 |
+| 10002     | 2020-01-01 10:12:00 | 123452 |
+| 10003     | 2020-01-01 10:13:00 | 123453 |
+| 10004     | 2020-01-01 10:15:00 | 123454 |
+
+### Payment Confirmation table
+
+| requestID | createdTime         | otp    | status                  |
+| --------- | ------------------- | ------ | ----------------------- |
+| 10001     | 2020-01-01 10:15:00 | 123451 | otp match - confirmed   |
+| 10002     | 2020-01-01 10:18:00 | 123452 | outside 5 minute window |
+| 10004     | 2020-01-01 10:14:00 | 333333 | otp doesn't match       |
+
