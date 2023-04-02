@@ -1112,8 +1112,6 @@ See
 - [aggregationdemo](https://github.com/rumq/Kafka-Streams-with-Spring-Cloud-Stream/tree/main/streamingaggregates)
 - [StreamingAggregates](streamingaggregates/StreamingAggregates.md)
 
-
-
 Problem Statement
 
 ```mermaid
@@ -1130,8 +1128,8 @@ flowchart TD
     K1 --> P[Print]
   end
 ```
-As we are using `groupBy` without the `Key`, internal repartitioning will happen.
 
+As we are using `groupBy` without the `Key`, internal repartitioning will happen.
 
 ```java
     public void process(KStream<String, String> input) {
@@ -1242,18 +1240,30 @@ Kafka streams API has key preserving and key changing operations. The below tabl
 
 ### Reducing a Kafka Stream
 
+See [Rewards](chapter-08-ktable-aggregration/rewards/Rewards.md)
+
 Computing `TotalLoyaltyPoints` for a customer which will require adding up all the `EarnedLoyaltyPoints`. We can use `reduce()` to do this as there is no `sum()` method.
 
 We will be looking at _rewards_ demo.
 
-
 ### Aggregating a Kafka Stream
+
+See
+
+- [StreamingAggregates](chapter-08-ktable-aggregration/streamingaggregates/StreamingAggregates.md)
 
 ### Aggregation Challenges
 
+- [KStreamAggregate](chapter-08-ktable-aggregration/kstreamaggregate/KStreamAggregate.md)
+
 ### KTable Aggregation
 
+-[KTableDemo](chapter-08-ktable-aggregration/ktabledemo/KTableDemo.md)
+-[KTableAggregate](chapter-08-ktable-aggregration/ktableaggregate/KTableAggregate.md)
+
 ## Chapter 9 : Timestamp and Windowing Aggregates
+
+See [TimestampExtractor](https://kafka.apache.org/31/javadoc/org/apache/kafka/streams/processor/TimestampExtractor.html) interface documentation for list of timestamp extractors.
 
 ```
 

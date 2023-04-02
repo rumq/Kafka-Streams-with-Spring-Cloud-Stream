@@ -10,4 +10,4 @@ public class WindowCountApplication {
 		SpringApplication.run(WindowCountApplication.class, args);
 	}
 
-}
+}+
