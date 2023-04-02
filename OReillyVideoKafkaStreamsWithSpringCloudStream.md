@@ -64,10 +64,13 @@
     - [KTable Aggregation](#ktable-aggregation)
   - [Chapter 9 : Timestamp and Windowing Aggregates](#chapter-9--timestamp-and-windowing-aggregates)
   - [Chapter 10 : Joins in Kafka Streams](#chapter-10--joins-in-kafka-streams)
-    - [A payment cycle flow chart](#a-payment-cycle-flow-chart)
-    - [A payment cycle sequence diagram](#a-payment-cycle-sequence-diagram)
-    - [Payment Request table](#payment-request-table)
-    - [Payment Confirmation table](#payment-confirmation-table)
+    - [KStream-KStream Joins](#kstream-kstream-joins)
+      - [A payment cycle flow chart](#a-payment-cycle-flow-chart)
+      - [A payment cycle sequence diagram](#a-payment-cycle-sequence-diagram)
+      - [Payment Request table](#payment-request-table)
+      - [Payment Confirmation table](#payment-confirmation-table)
+      - [The process method of Listener](#the-process-method-of-listener)
+    - [KStream-KTable joins](#kstream-ktable-joins)
 
 ## Links
 
@@ -1284,9 +1287,11 @@ Conditions for a join :
 5. Non-key based joins are allowed with KStream-GlobalKTable joins
 6. KStream must be on the left side of the join
 
+
+### KStream-KStream Joins
 KStream-KStream joins are always windowed.
 
-### A payment cycle flow chart
+#### A payment cycle flow chart
 
 ```mermaid
 flowchart
@@ -1306,7 +1311,7 @@ flowchart
   end
 ```
 
-### A payment cycle sequence diagram
+#### A payment cycle sequence diagram
 
 Here is the sequence diagram for the above flow.
 
@@ -1351,7 +1356,7 @@ Payment Confirmation `100001`
 { "TransactionID": "100001", "CreatedTime": 1550150100000, "OTP": 852960 }
 ```
 
-### Payment Request table
+#### Payment Request table
 
 | requestID | createdTime         | otp    |
 | --------- | ------------------- | ------ |
@@ -1360,7 +1365,7 @@ Payment Confirmation `100001`
 | 10003     | 2020-01-01 10:13:00 | 123453 |
 | 10004     | 2020-01-01 10:15:00 | 123454 |
 
-### Payment Confirmation table
+#### Payment Confirmation table
 
 | requestID | createdTime         | otp    | status                  |
 | --------- | ------------------- | ------ | ----------------------- |
@@ -1368,3 +1373,30 @@ Payment Confirmation `100001`
 | 10002     | 2020-01-01 10:18:00 | 123452 | outside 5 minute window |
 | 10004     | 2020-01-01 10:14:00 | 333333 | otp doesn't match       |
 
+#### The process method of Listener 
+
+```java
+  @StreamListener
+    public void process(@Input("payment-request-channel") KStream<String, PaymentRequest> request,
+                        @Input("payment-confirmation-channel") KStream<String, PaymentConfirmation> confirmation) {
+
+        request.foreach((k, v) -> log.info("Request Key = " + k + " Created Time = "
+                + Instant.ofEpochMilli(v.getCreatedTime()).atOffset(ZoneOffset.UTC)));
+
+        confirmation.foreach((k, v) -> log.info("Confirmation Key = " + k + " Created Time = "
+                + Instant.ofEpochMilli(v.getCreatedTime()).atOffset(ZoneOffset.UTC)));
+
+
+        request.join(confirmation,
+                (r, c) -> recordBuilder.getTransactionStatus(r, c),
+                JoinWindows.of(Duration.ofMinutes(5)),
+                StreamJoined.with(Serdes.String(),
+                        new JsonSerde<>(PaymentRequest.class),
+                        new JsonSerde<>(PaymentConfirmation.class)))
+                .foreach((k, v) -> log.info("Transaction ID = " + k + " Status = " + v.getStatus()));
+```
+
+### KStream-KTable joins
+
+Always non windowed.
+Easy to implement.
