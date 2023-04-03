@@ -71,7 +71,7 @@
       - [Payment Confirmation table](#payment-confirmation-table)
       - [The process method of Listener](#the-process-method-of-listener)
     - [KStream-KTable joins](#kstream-ktable-joins)
-    - [KStream to KTabe joins](#kstream-to-ktabe-joins)
+    - [KStream to KTable joins](#kstream-to-ktable-joins)
 
 ## Links
 
@@ -1288,8 +1288,8 @@ Conditions for a join :
 5. Non-key based joins are allowed with KStream-GlobalKTable joins
 6. KStream must be on the left side of the join
 
-
 ### KStream-KStream Joins
+
 KStream-KStream joins are always windowed.
 
 #### A payment cycle flow chart
@@ -1374,7 +1374,7 @@ Payment Confirmation `100001`
 | 10002     | 2020-01-01 10:18:00 | 123452 | outside 5 minute window |
 | 10004     | 2020-01-01 10:14:00 | 333333 | otp doesn't match       |
 
-#### The process method of Listener 
+#### The process method of Listener
 
 ```java
   @StreamListener
@@ -1402,7 +1402,7 @@ Payment Confirmation `100001`
 Always non windowed.
 Easy to implement.
 
-### KStream to KTabe joins
+### KStream to KTable joins
 
 Used for enrichment.
 Non windowed.
@@ -1410,12 +1410,12 @@ Non windowed.
 Shows how to join a KStream to a GlobalKTable which results in an union of data from two topics.
 
 ```mermaid
-flowchart 
+flowchart
   subgraph "KStream to GlbalKTable join"
-    direction LR    
+    direction LR
     Topic1  --> |KStream| App
     Topic2 --> |GlobalKTable| App[App - join 1,2 ]
-    App --> |KStream| Anything
+    App --> |KTable| Anything
   end
 
 ```
@@ -1423,13 +1423,17 @@ flowchart
 ```json
 { "uid": 123, "action": "subscribe}
 ```
+
 ```json
-{ "uid": 123, "city": "Bangalore", "country": "India"}
+{ "uid": 123, "city": "Bangalore", "country": "India" }
 ```
+
 A join
+
 ```json
-{ "uid": 123, "action": "subscribe", "city": "Bangalore"}
+{ "uid": 123, "action": "subscribe", "city": "Bangalore" }
 ```
+
 Regular KTable
 
 ```mermaid
@@ -1437,7 +1441,7 @@ flowchart LR
   subgraph "Application"
     subgraph Thread1
       T1 --> |KTable| K1[KTable]
-    end 
+    end
     subgraph Thread2
       T2 --> |KTable| K2[KTable]
     end
@@ -1455,14 +1459,15 @@ flowchart LR
 
 
 ```
-Glbal KTable
+
+Global KTable
 
 ```mermaid
 flowchart LR
   subgraph "Application"
     subgraph Thread1
       T1 --> |GlobalKTable| K1[GlobalKTable]
-    end 
+    end
     subgraph Thread2
       T2 --> |GlobalKTable| K2[GlobalKTable]
     end
@@ -1483,6 +1488,60 @@ flowchart LR
     P3 --> T2
   end
 
+```
 
+```json
+// Sample inventory list - GlobalKTable [lookup table - bounded]
+{ "InventoryID": "1001", "NewType": "Sports"}
+{ "InventoryID": "1002", "NewType": "Politics"}
+{ "InventoryID": "1003", "NewType": "Sports"}
+// Sample click events  - KStream [ stream of events - unbounded]
+{ "InventoryID": "1001"}
+{ "InventoryID": "1002"}
+{ "InventoryID": "1003"}
+{ "InventoryID": "1001"}
+{ "InventoryID": "1003"}
+```
 
+Joined Table
+
+| InventoryID | NewType  |
+| ----------- | -------- |
+| 1001        | Sports   |
+| 1002        | Politics |
+| 1003        | Sports   |
+| 1001        | Sports   |
+| 1003        | Sports   |
+
+Grouped by NewType
+
+| NewType  | InvetoryIDs            |
+| -------- | ---------------------- |
+| Sports   | 1001, 1003, 1001, 1003 |
+| Politics | 1002                   |
+
+Count
+
+| News Type | Clicks |
+| --------- | ------ |
+| Sports    | 4      |
+| Politics  | 1      |
+
+```java
+    public void process(@Input("inventories-channel") GlobalKTable<String, AdInventories> inventory,
+                        @Input("clicks-channel") KStream<String, AdClick> click) {
+
+        click.foreach((k, v) -> log.info("Click Key: {}, Value: {}",k, v));
+
+        click.join(inventory,  // Other Globa
+                (clickKey, clickValue) -> clickKey,  // keyValue Mapper
+                (clickValue, inventoryValue) -> inventoryValue)  // ValueJoiner
+                .groupBy((joinedKey, joinedValue) -> joinedValue.getNewsType(),  // KeySelector
+                        Grouped.with(Serdes.String(),    // KeySerde
+                                new JsonSerde<>(AdInventories.class)))  // ValueSerde
+                .count()
+                .toStream()
+                .foreach((k, v) -> log.info("Click Key: {}, Value: {}",k, v));
+    }
+}
 ```
