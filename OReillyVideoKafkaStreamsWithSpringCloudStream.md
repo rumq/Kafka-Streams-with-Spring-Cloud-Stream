@@ -73,6 +73,8 @@
     - [KStream-KTable joins](#kstream-ktable-joins)
     - [KStream to KTable joins](#kstream-to-ktable-joins)
     - [Implementing complex Aggregation](#implementing-complex-aggregation)
+    - [Stream Listener Manual testing](#stream-listener-manual-testing)
+    - [Stream Listener Unit testing](#stream-listener-unit-testing)
 
 ## Links
 
@@ -1496,12 +1498,16 @@ flowchart LR
 { "InventoryID": "1001", "NewType": "Sports"}
 { "InventoryID": "1002", "NewType": "Politics"}
 { "InventoryID": "1003", "NewType": "Sports"}
+{ "InventoryID": "1004", "NewType": "Business"}
+
 // Sample click events  - KStream [ stream of events - unbounded]
 { "InventoryID": "1001"}
 { "InventoryID": "1002"}
 { "InventoryID": "1003"}
 { "InventoryID": "1001"}
 { "InventoryID": "1003"}
+{ "InventoryID": "1004"}
+{ "InventoryID": "1002"}
 ```
 
 Joined Table
@@ -1513,20 +1519,31 @@ Joined Table
 | 1003        | Sports   |
 | 1001        | Sports   |
 | 1003        | Sports   |
+| 1004        | Business |
+| 1002     | Politics |
 
 Grouped by NewType
 
 | NewType  | InvetoryIDs            |
 | -------- | ---------------------- |
 | Sports   | 1001, 1003, 1001, 1003 |
-| Politics | 1002                   |
+| Politics | 1002, 1002             |
+| Business | 1004                   |
 
 Count
 
 | News Type | Clicks |
 | --------- | ------ |
 | Sports    | 4      |
-| Politics  | 1      |
+| Politics  | 2      |
+| Business  | 1      |
+
+top 2
+
+| News Type | Clicks |
+| --------- | ------ |
+| Sports    | 4      |
+| Politics  | 2      |
 
 ```java
     public void process(@Input("inventories-channel") GlobalKTable<String, AdInventories> inventory,
@@ -1547,5 +1564,13 @@ Count
 }
 ```
 ### Implementing complex Aggregation
+See 
+* [Top3Spots](chapter-10-joins-in-kafka-streams/top3spots/Top3Spots.md)
+
+### Stream Listener Manual testing
+
+### Stream Listener Unit testing
+
+
 
 
