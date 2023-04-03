@@ -71,6 +71,7 @@
       - [Payment Confirmation table](#payment-confirmation-table)
       - [The process method of Listener](#the-process-method-of-listener)
     - [KStream-KTable joins](#kstream-ktable-joins)
+    - [KStream to KTabe joins](#kstream-to-ktabe-joins)
 
 ## Links
 
@@ -1400,3 +1401,88 @@ Payment Confirmation `100001`
 
 Always non windowed.
 Easy to implement.
+
+### KStream to KTabe joins
+
+Used for enrichment.
+Non windowed.
+
+Shows how to join a KStream to a GlobalKTable which results in an union of data from two topics.
+
+```mermaid
+flowchart 
+  subgraph "KStream to GlbalKTable join"
+    direction LR    
+    Topic1  --> |KStream| App
+    Topic2 --> |GlobalKTable| App[App - join 1,2 ]
+    App --> |KStream| Anything
+  end
+
+```
+
+```json
+{ "uid": 123, "action": "subscribe}
+```
+```json
+{ "uid": 123, "city": "Bangalore", "country": "India"}
+```
+A join
+```json
+{ "uid": 123, "action": "subscribe", "city": "Bangalore"}
+```
+Regular KTable
+
+```mermaid
+flowchart LR
+  subgraph "Application"
+    subgraph Thread1
+      T1 --> |KTable| K1[KTable]
+    end 
+    subgraph Thread2
+      T2 --> |KTable| K2[KTable]
+    end
+    subgraph Thread3
+      T3 --> |KTable| K3[KTable]
+    end
+
+  end
+  subgraph "Topics"
+    P1[Partition 1] --> T1[Task 1]
+    P2[Partition 2] --> T2[Task 2]
+    P3[Partition 3] --> T3[Task 3]
+  end
+
+
+
+```
+Glbal KTable
+
+```mermaid
+flowchart LR
+  subgraph "Application"
+    subgraph Thread1
+      T1 --> |GlobalKTable| K1[GlobalKTable]
+    end 
+    subgraph Thread2
+      T2 --> |GlobalKTable| K2[GlobalKTable]
+    end
+    subgraph Thread3
+      T3 --> |GlobalKTable| K3[GlobalKTable]
+    end
+
+  end
+  subgraph "Topics"
+    P1[Partition 1] --> T1[Task 1]
+    P1 --> T2
+    P1 --> T3
+    P2[Partition 2] --> T2[Task 2]
+    P2 --> T1
+    P2 --> T3
+    P3[Partition 3] --> T3[Task 3]
+    P3 --> T1
+    P3 --> T2
+  end
+
+
+
+```
