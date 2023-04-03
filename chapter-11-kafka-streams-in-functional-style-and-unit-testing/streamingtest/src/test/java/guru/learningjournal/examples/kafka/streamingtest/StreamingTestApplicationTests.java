@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.kafka.test.utils.KafkaTestUtils.*;
 
 @Log4j2
@@ -64,8 +66,8 @@ public class StreamingTestApplicationTests {
 	public void SimpleProcessorApplicationTest() {
 		Set<String> actualResultSet = new HashSet<>();
 		Set<String> expectedResultSet = new HashSet<>();
-		expectedResultSet.add("HELLO1");
-		expectedResultSet.add("HELLO2");
+		expectedResultSet.add("ADDED HELLO1");
+		expectedResultSet.add("ADDED HELLO2");
 
 		Map<String, Object> senderProps = producerProps(embeddedKafka);
 		DefaultKafkaProducerFactory<Integer, String> pf = new DefaultKafkaProducerFactory<>(senderProps);
@@ -84,6 +86,7 @@ public class StreamingTestApplicationTests {
 			}
 
 			assertThat(actualResultSet.equals(expectedResultSet)).isTrue();
+			
 		}
 		finally {
 			pf.destroy();

@@ -14,7 +14,10 @@ public class ListenerService {
     @Bean
     public Function<KStream<String, String>, KStream<String, String>> process() {
 
-        return input -> input.mapValues(i -> i.toUpperCase());
+        return input -> input.mapValues(
+                (i) -> {
+                    return "ADDED " + i.toUpperCase();
+                });
 
     }
 }
