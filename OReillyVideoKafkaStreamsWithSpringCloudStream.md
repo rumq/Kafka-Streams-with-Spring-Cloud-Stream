@@ -73,8 +73,10 @@
     - [KStream-KTable joins](#kstream-ktable-joins)
     - [KStream to KTable joins](#kstream-to-ktable-joins)
     - [Implementing complex Aggregation](#implementing-complex-aggregation)
+  - [Chapter 11 - Kafka Streams in Functional Style and Unit Testing](#chapter-11---kafka-streams-in-functional-style-and-unit-testing)
     - [Stream Listener Manual testing](#stream-listener-manual-testing)
     - [Stream Listener Unit testing](#stream-listener-unit-testing)
+    - [Functional Style of Converting Stream listeners](#functional-style-of-converting-stream-listeners)
 
 ## Links
 
@@ -1567,10 +1569,16 @@ top 2
 See 
 * [Top3Spots](chapter-10-joins-in-kafka-streams/top3spots/Top3Spots.md)
 
+## Chapter 11 - Kafka Streams in Functional Style and Unit Testing
+
 ### Stream Listener Manual testing
 
 ### Stream Listener Unit testing
+See [](chapter-11-kafka-streams-in-functional-style-and-unit-testing/)
 
+### Functional Style of Converting Stream listeners
+
+See [StreamingTest](chapter-11-kafka-streams-in-functional-style-and-unit-testing/streamingtest)
 
 
 
