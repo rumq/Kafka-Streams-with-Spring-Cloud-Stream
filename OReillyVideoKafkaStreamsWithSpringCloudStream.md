@@ -72,6 +72,7 @@
       - [The process method of Listener](#the-process-method-of-listener)
     - [KStream-KTable joins](#kstream-ktable-joins)
     - [KStream to KTable joins](#kstream-to-ktable-joins)
+    - [Implementing complex Aggregation](#implementing-complex-aggregation)
 
 ## Links
 
@@ -1545,3 +1546,6 @@ Count
     }
 }
 ```
+### Implementing complex Aggregation
+
+
