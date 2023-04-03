@@ -1580,5 +1580,9 @@ See [](chapter-11-kafka-streams-in-functional-style-and-unit-testing/)
 
 See [StreamingTest](chapter-11-kafka-streams-in-functional-style-and-unit-testing/streamingtest)
 
+See the documentation here [Spring Cloud Stream ]([https://](https://spring.io/projects/spring-cloud-stream))
+
+Go through the reference documentation [Spring Cloud Stream Kafka Binder Reference Guide](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream-binder-kafka.html#_reference_guide).
+
 
 
